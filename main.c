@@ -1,22 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
+int recebePosicaoTreinamento(int *, int);
 int *arqAleat(int *);
 /*
-  FUNCAO DE RANDOM, O Q FOR 1 SERA OS ESCOLHIDOS DE TREINAMENTO DA PASTA, TANTO ASFALTO QUANTO GRAMA,
+  FUNCAO DE RANDOM, O Q FOR 1 SERA OS ESCOLHIDOS DE valores DA PASTA, TANTO ASFALTO QUANTO GRAMA,
   LOGO O QUE SOBRA É TESTE
 */
 int main (int argc, char *argv[]){
-  int  *treinamento;
-  treinamento = (int *)malloc(50*sizeof(int));
-  treinamento = arqAleat(treinamento);
+  FILE *fp;
+  int posicaoAsphalt;
+  char *diretorioAsphalt;
+  int  *sortyAsphalt, *sortyGrass, n;
+  sortyAsphalt = (int *)malloc(50*sizeof(int));
+  sortyGrass = (int *)malloc(50*sizeof(int));
+  diretorioAsphalt = (char *)malloc(30*sizeof(char));
+  int contImagem=10;
+  sortyAsphalt = arqAleat(sortyAsphalt);
+  sortyGrass = arqAleat(sortyGrass);
+  int cont;
+  posicaoAsphalt = recebePosicaoTreinamento(sortyAsphalt, contImagem);
+  contImagem++;
+  if(posicaoAsphalt<10)
+    n = sprintf(diretorioAsphalt, "DataSet/asphalt/asphalt_0%d.txt", posicaoAsphalt);
+  else
+    n = sprintf(diretorioAsphalt, "DataSet/asphalt/asphalt_%d.txt", posicaoAsphalt);
 
-  /*int cont;
-  for(cont= 0;cont<50;cont++){
-    printf("%d  ",treinamento[cont]);
-  }*/
+  fp= fopen(diretorioAsphalt, "r");
+  
   return 0;
+}
+
+int recebePosicaoTreinamento(int *sorteados, int contImagem){
+    int cont=0;
+    int posicao=0;
+    int valida=-1;
+    do{
+      if(sorteados[cont]==1){
+        posicao = cont;
+        valida++;
+      }
+      cont++;
+    }while(contImagem != valida);
+    return posicao+1;
 }
 
 int *arqAleat(int *vetor){
